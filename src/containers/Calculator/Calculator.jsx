@@ -34,7 +34,7 @@ class Calculator extends React.Component {
       value: {
         previous: null,
         operator: null,
-        current: null,
+        current: '0',
       },
       history: [],
     }
@@ -43,11 +43,11 @@ class Calculator extends React.Component {
   }
 
   executeCommand(command) {
-    const newValue = command.execute(this.state.value)
+    const newValue = command.execute(this.state)
 
     this.setState({
       value: newValue,
-      history: [...this.state.history, newValue],
+      // history: [...this.state.history, newValue],
     })
   }
 

@@ -7,12 +7,13 @@ const StyledDisplay = styled.div`
   border-bottom: 2px solid #707070;
   display: flex;
   justify-content: flex-end;
+  padding: 0 30px;
 `
 
 const DisplayValue = styled.div`
   color: #000000;
   font-size: 64px;
-  padding: 0 48px;
+  padding: 0 10px;
 `
 
 class Display extends React.Component {

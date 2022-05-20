@@ -1,84 +1,176 @@
 import { includesOperation } from '@/utils/includesOperation'
 
 export class AppendCharacter {
-  constructor(characterToAppend) {
+  constructor(characterToAppend, type) {
     this.characterToAppend = characterToAppend
+    this.type = type
   }
 
-  execute(currentValue) {
-    if (currentValue === 0 && this.characterToAppend !== '.') {
-      if(this.characterToAppend === '.' && )
-      return this.characterToAppend
-    } else {
-      return currentValue + this.characterToAppend
+  execute(state) {
+    const { previous, operator, current } = state.value
+    if (this.type === 'digit') {
+      if (
+        current === '0' &&
+        this.characterToAppend === '.'
+      ) {
+        return {
+          ...state.value,
+          current: current + this.characterToAppend,
+        }
+      }
+      if (
+        current === null &&
+        this.characterToAppend === '.'
+      ) {
+        return {
+          ...state.value,
+          current: '0' + this.characterToAppend,
+        }
+      }
+      if (current === '0') {
+        return {
+          ...state.value,
+          current: this.characterToAppend,
+        }
+      }
+      if (current === null) {
+        return {
+          ...state.value,
+          current: this.characterToAppend,
+        }
+      }
+      if (
+        this.characterToAppend === '.' &&
+        current !== null &&
+        current.includes('.')
+      ) {
+        return { ...state.value }
+      } else {
+        return {
+          ...state.value,
+          current: current + this.characterToAppend,
+        }
+      }
+    }
+    if (this.type === 'operator') {
+      if (previous === null && current === null) {
+        return state.value
+      }
+      if (current === null) {
+        return {
+          ...state.value,
+          operator: this.characterToAppend,
+        }
+      }
+      if (previous === null) {
+        return {
+          ...state.value,
+          previous: current,
+          operator: this.characterToAppend,
+          current: null,
+        }
+      }
+      return {
+        ...state.value,
+      }
+    }
+    if (this.type === 'sign') {
+      if (
+        (current === 0 && previous === null) ||
+        current === null
+      ) {
+        return state.value
+      }
+      return {
+        ...state.value,
+        current: -current,
+      }
+    }
+  }
+}
+
+export class ClearEntryCommand {
+  execute(state) {
+    const { previous, operator, current } = state.value
+    return {
+      previous: null,
+      operator: null,
+      current: '0',
     }
   }
 }
 
 export class Calculate {
-  constructor(value) {}
+  constructor(operation) {
+    this.operation = operation
+  }
 
-  execute(expression) {
-    if (includesOperation(expression)) {
-      const operator = includesOperation(expression)
-      const arrayExpression = expression.split(operator)
-      const [currentValue, changingValue] = arrayExpression
-      if (isNaN(currentValue) || isNaN(changingValue)) {
-        return expression
-      } else {
-        switch (operator) {
-          case '+':
-            return AddCommand.execute(
-              currentValue,
-              changingValue,
-            )
-          case '-':
-            return SubtractCommand.execute(
-              currentValue,
-              changingValue,
-            )
-          case '*':
-            return MultiplyCommand.execute(
-              currentValue,
-              changingValue,
-            )
-          case '/':
-            return DivideCommand.execute(
-              currentValue,
-              changingValue,
-            )
+  execute(state) {
+    const { previous, operator, current } = state.value
+    switch (operator) {
+      case '+':
+        return {
+          previous: null,
+          operator: null,
+          current: AddCommand.execute(previous, current),
         }
-      }
-    } else {
-      return expression
+      case '-':
+        return {
+          previous: null,
+          operator: null,
+          current: SubtractCommand.execute(
+            previous,
+            current,
+          ),
+        }
+      case '*':
+        return {
+          previous: null,
+          operator: null,
+          current: MultiplyCommand.execute(
+            previous,
+            current,
+          ),
+        }
+      case '/':
+        return {
+          previous: null,
+          operator: null,
+          current: DivideCommand.execute(previous, current),
+        }
+      case '%':
+        return {
+          previous: null,
+          operator: null,
+          current: RemainderCommand.execute(
+            previous,
+            current,
+          ),
+        }
     }
   }
 }
 
 export class AddCommand {
   static execute(currentValue, valueToAdd) {
-    console.log(
-      currentValue,
-      'curr',
-      valueToAdd,
-      'valuetoadd',
-    )
-    return +currentValue + +valueToAdd
+    return (+currentValue + +valueToAdd).toString()
   }
 }
 
 export class SubtractCommand {
   static execute(currentValue, valueToSubtract) {
-    return currentValue - valueToSubtract
+    return (currentValue - valueToSubtract).toString()
   }
 }
 
 export class MultiplyCommand {
   static execute(currentValue, valueToMultiply) {
     if (Number.isInteger(currentValue * valueToMultiply)) {
-      return currentValue * valueToMultiply
+      return (currentValue * valueToMultiply).toString()
     } else {
-      return (currentValue * valueToMultiply).toFixed(3)
+      return (currentValue * valueToMultiply)
+        .toFixed(3)
+        .toString()
     }
   }
 }
@@ -86,26 +178,18 @@ export class MultiplyCommand {
 export class DivideCommand {
   static execute(currentValue, valueToDivide) {
     if (currentValue % valueToDivide) {
-      return (currentValue / valueToDivide).toFixed(3)
+      return (currentValue / valueToDivide)
+        .toFixed(3)
+        .toString()
     } else {
-      return currentValue / valueToDivide
+      return (currentValue / valueToDivide).toString()
     }
   }
 }
 
-export class ChangeSignCommand {
-  execute(currentValue) {
-    if (isNaN(currentValue)) {
-      return currentValue
-    } else {
-      return -currentValue
-    }
-  }
-}
-
-export class ClearEntryCommand {
-  execute(currentValue) {
-    return 0
+export class RemainderCommand {
+  static execute(currentValue, valueToDivide) {
+    return (currentValue % valueToDivide).toString()
   }
 }
 

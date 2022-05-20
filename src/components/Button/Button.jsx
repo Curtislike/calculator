@@ -44,7 +44,9 @@ const Button = ({
   executeCommand,
 }) => (
   <StyledButton
-    onClick={() => executeCommand(new command(label))}>
+    onClick={() =>
+      executeCommand(new command(label, type))
+    }>
     {label}
   </StyledButton>
 )

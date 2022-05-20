@@ -1,5 +1,4 @@
 import {
-  AddCommand,
   Calculate,
   AppendCharacter,
   ClearEntryCommand,
@@ -8,7 +7,7 @@ import {
 
 export const btnTypes = [
   {
-    type: 'operation',
+    type: 'operator',
     label: 'C',
     command: ClearEntryCommand,
   },
@@ -28,12 +27,12 @@ export const btnTypes = [
     command: AppendCharacter,
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: '*',
     command: AppendCharacter,
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: '-',
     command: AppendCharacter,
   },
@@ -53,12 +52,12 @@ export const btnTypes = [
     command: AppendCharacter,
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: '/',
     command: AppendCharacter,
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: '+',
     command: AppendCharacter,
   },
@@ -78,7 +77,7 @@ export const btnTypes = [
     command: AppendCharacter,
   },
   {
-    type: 'operation',
+    type: 'calculate',
     label: '=',
     command: Calculate,
   },
@@ -103,29 +102,29 @@ export const btnTypes = [
     command: AppendCharacter,
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: '%',
     command: AppendCharacter,
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: 'CE',
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: 'CA',
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: 'CH',
   },
   {
-    type: 'operation',
+    type: 'operator',
     label: 'H',
   },
   {
-    type: 'operation',
+    type: 'sign',
     label: '+/-',
-    command: ChangeSignCommand,
+    command: AppendCharacter,
   },
 ]
