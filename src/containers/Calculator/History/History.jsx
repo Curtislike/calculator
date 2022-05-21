@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import uniqid from 'uniqid'
 
 const StyledHistory = styled.div`
   display: flex;
@@ -33,7 +34,12 @@ class History extends React.Component {
       <StyledHistory>
         <HistoryTitle>History</HistoryTitle>
         <HistoryResultWrap>
-          <HistoryResult>2*2</HistoryResult>
+          {!!this.props.history.length &&
+            this.props.history.map(item => (
+              <HistoryResult key={uniqid()}>
+                {item[0] + item[1] + item[2]}
+              </HistoryResult>
+            ))}
         </HistoryResultWrap>
       </StyledHistory>
     )

@@ -1,6 +1,4 @@
-import { includesOperation } from '@/utils/includesOperation'
-
-export class AppendCharacter {
+export class AppendCharacterCommand {
   constructor(characterToAppend, type) {
     this.characterToAppend = characterToAppend
     this.type = type
@@ -14,8 +12,11 @@ export class AppendCharacter {
         this.characterToAppend === '.'
       ) {
         return {
-          ...state.value,
-          current: current + this.characterToAppend,
+          ...state,
+          value: {
+            ...state.value,
+            current: current + this.characterToAppend,
+          },
         }
       }
       if (
@@ -23,20 +24,29 @@ export class AppendCharacter {
         this.characterToAppend === '.'
       ) {
         return {
-          ...state.value,
-          current: '0' + this.characterToAppend,
+          ...state,
+          value: {
+            ...state.value,
+            current: '0' + this.characterToAppend,
+          },
         }
       }
       if (current === '0') {
         return {
-          ...state.value,
-          current: this.characterToAppend,
+          ...state,
+          value: {
+            ...state.value,
+            current: this.characterToAppend,
+          },
         }
       }
       if (current === null) {
         return {
-          ...state.value,
-          current: this.characterToAppend,
+          ...state,
+          value: {
+            ...state.value,
+            current: this.characterToAppend,
+          },
         }
       }
       if (
@@ -44,34 +54,45 @@ export class AppendCharacter {
         current !== null &&
         current.includes('.')
       ) {
-        return { ...state.value }
+        return { ...state }
       } else {
         return {
-          ...state.value,
-          current: current + this.characterToAppend,
+          ...state,
+          value: {
+            ...state.value,
+            current: current + this.characterToAppend,
+          },
         }
       }
     }
     if (this.type === 'operator') {
       if (previous === null && current === null) {
-        return state.value
+        return { ...state }
       }
       if (current === null) {
         return {
-          ...state.value,
-          operator: this.characterToAppend,
+          ...state,
+          value: {
+            ...state.value,
+            operator: this.characterToAppend,
+          },
         }
       }
       if (previous === null) {
         return {
-          ...state.value,
-          previous: current,
-          operator: this.characterToAppend,
-          current: null,
+          ...state,
+          value: {
+            previous: current,
+            operator: this.characterToAppend,
+            current: null,
+          },
         }
       }
       return {
-        ...state.value,
+        ...state,
+        value: {
+          ...state.value,
+        },
       }
     }
     if (this.type === 'sign') {
@@ -79,11 +100,14 @@ export class AppendCharacter {
         (current === 0 && previous === null) ||
         current === null
       ) {
-        return state.value
+        return { ...state }
       }
       return {
-        ...state.value,
-        current: -current,
+        ...state,
+        value: {
+          ...state.value,
+          current: -current,
+        },
       }
     }
   }
@@ -93,59 +117,107 @@ export class ClearEntryCommand {
   execute(state) {
     const { previous, operator, current } = state.value
     return {
-      previous: null,
-      operator: null,
-      current: '0',
+      ...state,
+      value: {
+        previous: null,
+        operator: null,
+        current: '0',
+      },
     }
   }
 }
 
-export class Calculate {
+export class CalculateCommand {
   constructor(operation) {
     this.operation = operation
   }
 
   execute(state) {
     const { previous, operator, current } = state.value
+    if (
+      operator === null ||
+      previous === null ||
+      current === null
+    ) {
+      return { ...state }
+    }
     switch (operator) {
       case '+':
         return {
-          previous: null,
-          operator: null,
-          current: AddCommand.execute(previous, current),
+          ...state,
+          value: {
+            previous: null,
+            operator: null,
+            current: AddCommand.execute(previous, current),
+          },
+          history: [
+            ...state.history,
+            [previous, operator, current],
+          ],
         }
       case '-':
         return {
-          previous: null,
-          operator: null,
-          current: SubtractCommand.execute(
-            previous,
-            current,
-          ),
+          ...state,
+          value: {
+            previous: null,
+            operator: null,
+            current: SubtractCommand.execute(
+              previous,
+              current,
+            ),
+          },
+          history: [
+            ...state.history,
+            [previous, operator, current],
+          ],
         }
       case '*':
         return {
-          previous: null,
-          operator: null,
-          current: MultiplyCommand.execute(
-            previous,
-            current,
-          ),
+          ...state,
+          value: {
+            previous: null,
+            operator: null,
+            current: MultiplyCommand.execute(
+              previous,
+              current,
+            ),
+          },
+          history: [
+            ...state.history,
+            [previous, operator, current],
+          ],
         }
       case '/':
         return {
-          previous: null,
-          operator: null,
-          current: DivideCommand.execute(previous, current),
+          ...state,
+          value: {
+            previous: null,
+            operator: null,
+            current: DivideCommand.execute(
+              previous,
+              current,
+            ),
+          },
+          history: [
+            ...state.history,
+            [previous, operator, current],
+          ],
         }
       case '%':
         return {
-          previous: null,
-          operator: null,
-          current: RemainderCommand.execute(
-            previous,
-            current,
-          ),
+          ...state,
+          value: {
+            previous: null,
+            operator: null,
+            current: RemainderCommand.execute(
+              previous,
+              current,
+            ),
+          },
+          history: [
+            ...state.history,
+            [previous, operator, current],
+          ],
         }
     }
   }
@@ -177,6 +249,10 @@ export class MultiplyCommand {
 
 export class DivideCommand {
   static execute(currentValue, valueToDivide) {
+    if (valueToDivide === '0') {
+      alert('Division by zero is impossible')
+      return '0'
+    }
     if (currentValue % valueToDivide) {
       return (currentValue / valueToDivide)
         .toFixed(3)
@@ -194,20 +270,95 @@ export class RemainderCommand {
 }
 
 export class ClearHistoryCommand {
-  execute(currentHistory) {
-    return []
+  execute(state) {
+    return {
+      ...state,
+      history: [],
+    }
   }
 }
 
 export class ClearAllCommand {
-  constructor() {
-    this.clearedEntry = new ClearEntryCommand()
-    this.clearedHistory = new ClearHistoryCommand()
+  execute(state) {
+    return {
+      ...state,
+      value: {
+        previous: null,
+        operator: null,
+        current: '0',
+      },
+      history: [],
+    }
   }
+}
 
-  execute() {
-    this.clearedEntry.execute()
-    this.clearedHistory.execute()
+export class BackspaceCommand {
+  execute(state) {
+    const { previous, operator, current } = state.value
+    if (
+      (current === null || current === '0') &&
+      previous === null &&
+      operator === null
+    )
+      return {
+        ...state,
+      }
+    if (
+      previous === null &&
+      operator === null &&
+      current.length > 1
+    ) {
+      return {
+        ...state,
+        value: {
+          ...state.value,
+          current: current.substr(0, current.length - 1),
+        },
+      }
+    }
+    if (
+      previous === null &&
+      operator === null &&
+      current.length < 2 &&
+      current !== '0'
+    ) {
+      return {
+        ...state,
+        value: {
+          ...state.value,
+          current: '0',
+        },
+      }
+    }
+    if (current === null && operator !== null) {
+      return {
+        ...state,
+        value: {
+          ...state.value,
+          operator: null,
+          previous: null,
+          current: previous,
+        },
+      }
+    }
+    if (current.length > 1) {
+      return {
+        ...state,
+        value: {
+          ...state.value,
+          current: current.substr(0, current.length - 1),
+        },
+      }
+    }
+    if (current.length < 2) {
+      return {
+        ...state,
+        value: {
+          ...state.value,
+          current: null,
+        },
+      }
+    }
   }
 }
 

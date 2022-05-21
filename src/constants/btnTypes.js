@@ -1,8 +1,11 @@
 import {
-  Calculate,
-  AppendCharacter,
+  CalculateCommand,
+  AppendCharacterCommand,
   ClearEntryCommand,
   ChangeSignCommand,
+  ClearHistoryCommand,
+  ClearAllCommand,
+  BackspaceCommand,
 } from '@/utils/commands'
 
 export const btnTypes = [
@@ -14,109 +17,107 @@ export const btnTypes = [
   {
     type: 'digit',
     label: '7',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '8',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '9',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'operator',
     label: '*',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'operator',
     label: '-',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '4',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '5',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '6',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'operator',
     label: '/',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'operator',
     label: '+',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '1',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '2',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '3',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'calculate',
     label: '=',
-    command: Calculate,
+    command: CalculateCommand,
   },
   {
     type: 'digit',
     label: '.',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '(',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: '0',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'digit',
     label: ')',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
   },
   {
     type: 'operator',
     label: '%',
-    command: AppendCharacter,
-  },
-  {
-    type: 'operator',
-    label: 'CE',
+    command: AppendCharacterCommand,
   },
   {
     type: 'operator',
     label: 'CA',
+    command: ClearAllCommand,
   },
   {
     type: 'operator',
     label: 'CH',
+    command: ClearHistoryCommand,
   },
   {
     type: 'operator',
@@ -125,6 +126,11 @@ export const btnTypes = [
   {
     type: 'sign',
     label: '+/-',
-    command: AppendCharacter,
+    command: AppendCharacterCommand,
+  },
+  {
+    type: 'backspace',
+    label: '\u27F5',
+    command: BackspaceCommand,
   },
 ]

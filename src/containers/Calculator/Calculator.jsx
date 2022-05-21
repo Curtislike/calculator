@@ -1,31 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import Display from './Display/Display'
-import Keypad from './Keypad/Keypad'
-import History from './History/History' // alias routes
+import Display from '@/containers/Calculator/Display/Display'
+import Keypad from '@/containers/Calculator/Keypad/Keypad'
+import History from '@/containers/Calculator/History/History'
 
 const StyledCalculator = styled.div`
   margin: 0 25px;
   display: flex;
   flex-direction: row;
 `
-
-// - ***Calculator*** - корневой элемент для менеджмента данных
-//  калькулятора (логика для хранения истории, операций, текущего состояния и т.д.).
-
-// - Сложение +
-// - Вычитание +
-// - Умножение +
-// - Деление +
-// - Переключение знака +
-// - Построитель выражения -
-// - История операций -
-// - Показывать полную историю -
-// - Очистка истории -
-// - Очистка вычисленного значения и выражения -
-// - Очистка всего (истории, вычисленного значения и выражения) -
-// - Точность расчета - 3 символа +
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -39,20 +23,15 @@ class Calculator extends React.Component {
       history: [],
     }
     this.executeCommand = this.executeCommand.bind(this)
-    this.getHistory = this.getHistory.bind(this)
   }
 
   executeCommand(command) {
-    const newValue = command.execute(this.state)
+    const newState = command.execute(this.state)
+    console.log(newState)
 
     this.setState({
-      value: newValue,
-      // history: [...this.state.history, newValue],
+      ...newState,
     })
-  }
-
-  getHistory(command) {
-    command.execute(this.state.history)
   }
 
   render() {
@@ -63,7 +42,8 @@ class Calculator extends React.Component {
           <Keypad
             executeCommand={this.executeCommand}></Keypad>
         </div>
-        <History></History>
+
+        <History history={this.state.history}></History>
       </StyledCalculator>
     )
   }
