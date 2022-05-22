@@ -5,13 +5,8 @@ import { PageLayout } from '@/layouts'
 import Header from '@/containers/Header/Header'
 import Calculator from '@/containers/Calculator/Calculator'
 
-import { Card, Heading } from './components'
+// import { Card, Heading } from './components'
 
 export default () => {
-  return (
-    <PageLayout>
-      <Header />
-      <Calculator></Calculator>
-    </PageLayout>
-  )
+  return <Calculator></Calculator>
 }

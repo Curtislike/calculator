@@ -1,5 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
+import { NavLink } from 'react-router-dom'
+import {
+  HOME_PAGE_ROUTE,
+  SETTINGS_PAGE_ROUTE,
+} from '@/constants'
 
 const StyledHeader = styled.header`
   background-color: #434343;
@@ -21,14 +26,16 @@ const StyledContainer = styled.div`
   align-items: center;
   max-width: 1856px;
   font-size: 32px;
-  opacity: 1; // add different opacity
 `
 
 const NavWrap = styled.nav`
   display: flex;
   flex-direction: row;
   .navItem {
-    padding-left: 15px;
+    margin-left: 15px;
+    text-decoration: none;
+    color: #ffffff;
+    opacity: 0.7;
   }
 `
 
@@ -38,8 +45,29 @@ const Header = () => {
       <StyledContainer>
         <div>Calculator App</div>
         <NavWrap>
-          <div className="navItem">Home</div>
-          <div className="navItem">Settings</div>
+          <NavLink
+            exact
+            to={HOME_PAGE_ROUTE}
+            activeStyle={{
+              opacity: 1,
+              borderBottom: 'solid',
+              borderBottomColor: '#ffffff',
+              borderBottomWidth: 2,
+            }}
+            className="navItem">
+            Home
+          </NavLink>
+          <NavLink
+            to={SETTINGS_PAGE_ROUTE}
+            activeStyle={{
+              opacity: 1,
+              borderBottom: 'solid',
+              borderBottomColor: '#ffffff',
+              borderBottomWidth: 2,
+            }}
+            className="navItem">
+            Settings
+          </NavLink>
         </NavWrap>
       </StyledContainer>
     </StyledHeader>

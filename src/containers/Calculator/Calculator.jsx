@@ -42,7 +42,6 @@ class Calculator extends React.Component {
           <Keypad
             executeCommand={this.executeCommand}></Keypad>
         </div>
-
         <History history={this.state.history}></History>
       </StyledCalculator>
     )
