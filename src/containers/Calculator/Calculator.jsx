@@ -7,6 +7,7 @@ import {
   StyledCalculator,
   WrapperDisplayKeypad,
 } from './components'
+import ControlPanel from './ControlPanel/ControlPanel'
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -18,8 +19,12 @@ class Calculator extends React.Component {
         current: '0',
       },
       history: [],
+      isHistoryVisible: true,
     }
     this.executeCommand = this.executeCommand.bind(this)
+    this.handleHistoryClick = this.handleHistoryClick.bind(
+      this,
+    )
   }
 
   executeCommand(command) {
@@ -31,6 +36,12 @@ class Calculator extends React.Component {
     })
   }
 
+  handleHistoryClick() {
+    this.setState({
+      isHistoryVisible: !this.state.isHistoryVisible,
+    })
+  }
+
   render() {
     return (
       <StyledCalculator>
@@ -39,7 +50,15 @@ class Calculator extends React.Component {
           <Keypad
             executeCommand={this.executeCommand}></Keypad>
         </WrapperDisplayKeypad>
-        <History history={this.state.history}></History>
+        <ControlPanel
+          isHistoryVisible={this.state.isHistoryVisible}
+          handleHistoryClick={
+            this.handleHistoryClick
+          }></ControlPanel>
+        <History
+          isHistoryVisible={this.state.isHistoryVisible}
+          handleHistoryClick={this.handleHistoryClick}
+          history={this.state.history}></History>
       </StyledCalculator>
     )
   }

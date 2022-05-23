@@ -26,6 +26,13 @@ export const HistoryTitle = styled.div`
   }
 `
 
+export const TitleWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`
+
 export const HistoryResultWrap = styled.div`
   font-size: 32px;
   align-self: flex-start;
@@ -63,4 +70,29 @@ export const HistoryResultWrap = styled.div`
 
 export const HistoryResult = styled.div`
   padding: 10px;
+`
+export const CloseBtn = styled.div`
+  margin: 0 15px;
+  cursor: pointer;
+  .bar1 {
+    width: 35px;
+    height: 4px;
+    background-color: #333;
+    margin: 6px 0;
+    transform: rotate(-45deg) translate(-9px, 6px);
+  }
+  .bar2 {
+    width: 35px;
+    height: 4px;
+    background-color: #333;
+    margin: 6px 0;
+    opacity: 0;
+  }
+  .bar3 {
+    width: 35px;
+    height: 4px;
+    background-color: #333;
+    margin: 7px 0;
+    transform: rotate(45deg) translate(-8px, -8px);
+  }
 `

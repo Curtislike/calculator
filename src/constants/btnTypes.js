@@ -115,15 +115,6 @@ export const btnTypes = [
     command: ClearAllCommand,
   },
   {
-    type: 'operator',
-    label: 'CH',
-    command: ClearHistoryCommand,
-  },
-  {
-    type: 'operator',
-    label: 'H',
-  },
-  {
     type: 'sign',
     label: '+/-',
     command: AppendCharacterCommand,
