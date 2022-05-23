@@ -363,7 +363,7 @@ export class BackspaceCommand {
 }
 
 export class ShowHistory {
-  execute(history) {
+  execute(state) {
     return history
   }
 }
