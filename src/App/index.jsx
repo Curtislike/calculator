@@ -5,16 +5,14 @@ import {
   HOME_PAGE_ROUTE,
   SETTINGS_PAGE_ROUTE,
 } from '@/constants'
-import Header from '@/containers/Header/Header'
+import Header from '@/containers/Header'
 
 import Loader from '@/components/Loader'
 import { PageLayout } from '@/layouts'
 import Calculator from '@/containers/Calculator/Calculator'
 
 const HomePage = lazy(() => import('@/pages/Home'))
-const SettingsPage = lazy(() =>
-  import('@/pages/Settings/Settings'),
-)
+const SettingsPage = lazy(() => import('@/pages/Settings'))
 
 export default () => (
   <Suspense fallback={<Loader />}>

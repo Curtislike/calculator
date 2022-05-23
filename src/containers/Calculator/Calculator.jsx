@@ -1,15 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import Display from '@/containers/Calculator/Display/Display'
 import Keypad from '@/containers/Calculator/Keypad/Keypad'
 import History from '@/containers/Calculator/History/History'
-
-const StyledCalculator = styled.div`
-  margin: 0 25px;
-  display: flex;
-  flex-direction: row;
-`
+import {
+  StyledCalculator,
+  WrapperDisplayKeypad,
+} from './components'
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -37,11 +34,11 @@ class Calculator extends React.Component {
   render() {
     return (
       <StyledCalculator>
-        <div>
+        <WrapperDisplayKeypad>
           <Display value={this.state.value}></Display>
           <Keypad
             executeCommand={this.executeCommand}></Keypad>
-        </div>
+        </WrapperDisplayKeypad>
         <History history={this.state.history}></History>
       </StyledCalculator>
     )
