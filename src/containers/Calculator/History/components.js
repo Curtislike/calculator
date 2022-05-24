@@ -21,6 +21,7 @@ export const StyledHistory = styled.div`
 
 export const HistoryTitle = styled.div`
   font-size: 32px;
+  color: ${({ theme }) => theme.text};
   @media (max-width: 650px) {
     font-size: 26px;
   }
@@ -44,7 +45,7 @@ export const HistoryResultWrap = styled.div`
     width: 11px;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: #434343;
+    background-color: ${({ theme }) => theme.primary};
     border-radius: 5px;
   }
   ::-webkit-scrollbar-track {
@@ -70,6 +71,7 @@ export const HistoryResultWrap = styled.div`
 
 export const HistoryResult = styled.div`
   padding: 10px;
+  color: ${({ theme }) => theme.text};
 `
 export const CloseBtn = styled.div`
   margin: 0 15px;
@@ -77,21 +79,21 @@ export const CloseBtn = styled.div`
   .bar1 {
     width: 35px;
     height: 4px;
-    background-color: #333;
+    background-color: ${({ theme }) => theme.secondary};
     margin: 6px 0;
     transform: rotate(-45deg) translate(-9px, 6px);
   }
   .bar2 {
     width: 35px;
     height: 4px;
-    background-color: #333;
+    background-color: ${({ theme }) => theme.secondary};
     margin: 6px 0;
     opacity: 0;
   }
   .bar3 {
     width: 35px;
     height: 4px;
-    background-color: #333;
+    background-color: ${({ theme }) => theme.secondary};
     margin: 7px 0;
     transform: rotate(45deg) translate(-8px, -8px);
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import {
   StyledDropdown,
@@ -7,6 +7,12 @@ import {
   DropdownContent,
   DropdownItem,
 } from './components'
+import {
+  lightTheme,
+  darkTheme,
+  coloredTheme,
+} from '@/theme'
+import { ThemeContext } from '@/context/themeContext'
 
 const themes = {
   light: 0,
@@ -15,33 +21,45 @@ const themes = {
 }
 
 const selectTheme = [
-  { theme: themes.light, label: 'Light Theme' },
-  { theme: themes.colored, label: 'Colored Theme' },
-  { theme: themes.dark, label: 'Dark Theme' },
+  {
+    theme: themes.light,
+    label: 'Light Theme',
+    selected: lightTheme,
+  },
+  {
+    theme: themes.colored,
+    label: 'Colored Theme',
+    selected: coloredTheme,
+  },
+  {
+    theme: themes.dark,
+    label: 'Dark Theme',
+    selected: darkTheme,
+  },
 ]
 
 const Dropdown = () => {
+  const { setSelectedTheme } = useContext(ThemeContext)
   const [isActive, setIsActive] = useState(false)
-  const [selectedTheme, setSelectedTheme] = useState(
-    themes.light,
-  )
+  const [themeNum, setThemeNum] = useState(themes.light)
 
   return (
     <StyledDropdown>
       <DropdownButton
         onClick={() => setIsActive(!isActive)}>
-        {selectTheme[selectedTheme].label}
+        {selectTheme[themeNum].label}
         <ArrowDown />
       </DropdownButton>
       {isActive && (
         <DropdownContent>
           {selectTheme.map(item =>
-            item.theme !== selectedTheme ? (
+            item.theme !== themeNum ? (
               <DropdownItem
                 key={item.theme}
                 onClick={() => {
                   setIsActive(false)
-                  setSelectedTheme(item.theme)
+                  setThemeNum(item.theme)
+                  setSelectedTheme(item.selected)
                 }}>
                 {item.label}
               </DropdownItem>
