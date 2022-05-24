@@ -1,14 +1,12 @@
 import { createGlobalStyle } from 'styled-components'
 
-import theme from './theme'
-
 export default createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 
-    font-family: ${theme.font};
+    font-family: sans-serif;
   }
 
   html, body {
@@ -27,6 +25,7 @@ export default createGlobalStyle`
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-color: ${({ theme }) => theme.background};
   }
 
   #root {

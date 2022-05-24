@@ -3,7 +3,9 @@ import styled from 'styled-components'
 export const StyledDropdown = styled.div`
   width: 400px;
   height: 93px;
-  border: 2px solid #707070;
+  border: ${({ theme }) => `2px solid ${theme.secondary}`};
+  background-color: ${({ theme }) => theme.elements};
+  color: ${({ theme }) => theme.text};
   border-radius: 8px;
   font-size: 32px;
   text-align: left;
@@ -41,8 +43,8 @@ export const DropdownContent = styled.div`
   left: -2px;
   top: 93%;
   width: 101%;
-  border: 2px solid #707070;
-  background: white;
+  border: ${({ theme }) => `2px solid ${theme.secondary}`};
+  background-color: ${({ theme }) => theme.elements};
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   @media (max-width: 530px) {

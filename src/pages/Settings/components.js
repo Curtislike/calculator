@@ -13,7 +13,7 @@ export const StyledSettings = styled.div`
 export const SettingsTitle = styled.h1`
   font-size: 64px;
   font-weight: normal;
-  color: #000000;
+  color: ${({ theme }) => theme.text};
   @media (max-width: 530px) {
     font-size: 36px;
   }
@@ -21,7 +21,9 @@ export const SettingsTitle = styled.h1`
 export const StyledButton = styled.button`
   width: 400px;
   height: 93px;
-  border: 2px solid #707070;
+  background-color: ${({ theme }) => theme.elements};
+  color: ${({ theme }) => theme.text};
+  border: ${({ theme }) => `2px solid ${theme.secondary}`};
   border-radius: 8px;
   font-size: 32px;
   text-align: left;

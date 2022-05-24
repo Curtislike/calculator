@@ -3,7 +3,8 @@ import styled from 'styled-components'
 export const StyledDisplay = styled.div`
   margin: 0 auto;
   width: 100%;
-  border-bottom: 2px solid #707070;
+  border-bottom: ${({ theme }) =>
+    `2px solid ${theme.secondary}`};
   display: flex;
   justify-content: flex-end;
   padding: 30px;
@@ -16,7 +17,7 @@ export const StyledDisplay = styled.div`
 `
 
 export const DisplayValue = styled.div`
-  color: #000000;
+  color: ${({ theme }) => theme.text};
   font-size: 64px;
   padding: 0 10px;
   @media (max-width: 920px) {

@@ -3,7 +3,9 @@ import styled from 'styled-components'
 export const StyledButton = styled.button`
   width: 150px;
   height: 150px;
-  border: 1px solid #707070;
+  border: ${({ theme }) => `2px solid ${theme.secondary}`};
+  background-color: ${({ theme }) => theme.elements};
+  color: ${({ theme }) => theme.text};
   border-radius: 32px;
   font-size: 64px;
   cursor: pointer;

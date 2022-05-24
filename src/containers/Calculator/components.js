@@ -5,6 +5,7 @@ export const StyledCalculator = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+  background-color: ${({ theme }) => theme.background};
 `
 export const WrapperDisplayKeypad = styled.div`
   display: flex;
