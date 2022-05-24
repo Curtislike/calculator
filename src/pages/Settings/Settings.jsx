@@ -1,4 +1,3 @@
-import Button from '@/components/Button/Button'
 import React from 'react'
 
 import { btnTypes } from '@/constants/btnTypes'
@@ -9,13 +8,19 @@ import {
   SettingsTitle,
   StyledButton,
 } from './components'
+import { useDispatch } from 'react-redux'
+import { clearAllHistory } from '@/actions/history.actions'
 
 const Settings = () => {
+  const dispatch = useDispatch()
   return (
     <StyledSettings>
       <SettingsTitle>Settings</SettingsTitle>
       <Dropdown />
-      <StyledButton>Clear All History</StyledButton>
+      <StyledButton
+        onClick={() => dispatch(clearAllHistory())}>
+        Clear All History
+      </StyledButton>
     </StyledSettings>
   )
 }

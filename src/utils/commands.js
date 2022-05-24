@@ -12,7 +12,6 @@ export class AppendCharacterCommand {
         this.characterToAppend === '.'
       ) {
         return {
-          ...state,
           value: {
             ...state.value,
             current: current + this.characterToAppend,
@@ -24,7 +23,6 @@ export class AppendCharacterCommand {
         this.characterToAppend === '.'
       ) {
         return {
-          ...state,
           value: {
             ...state.value,
             current: '0' + this.characterToAppend,
@@ -33,7 +31,6 @@ export class AppendCharacterCommand {
       }
       if (current === '0') {
         return {
-          ...state,
           value: {
             ...state.value,
             current: this.characterToAppend,
@@ -42,7 +39,6 @@ export class AppendCharacterCommand {
       }
       if (current === null) {
         return {
-          ...state,
           value: {
             ...state.value,
             current: this.characterToAppend,
@@ -54,10 +50,9 @@ export class AppendCharacterCommand {
         current !== null &&
         current.includes('.')
       ) {
-        return { ...state }
+        return { value: { ...state.value } }
       } else {
         return {
-          ...state,
           value: {
             ...state.value,
             current: current + this.characterToAppend,
@@ -67,11 +62,10 @@ export class AppendCharacterCommand {
     }
     if (this.type === 'operator') {
       if (previous === null && current === null) {
-        return { ...state }
+        return { value: { ...state.value } }
       }
       if (current === null) {
         return {
-          ...state,
           value: {
             ...state.value,
             operator: this.characterToAppend,
@@ -80,7 +74,6 @@ export class AppendCharacterCommand {
       }
       if (previous === null) {
         return {
-          ...state,
           value: {
             previous: current,
             operator: this.characterToAppend,
@@ -89,7 +82,6 @@ export class AppendCharacterCommand {
         }
       }
       return {
-        ...state,
         value: {
           ...state.value,
         },
@@ -100,10 +92,9 @@ export class AppendCharacterCommand {
         (current === 0 && previous === null) ||
         current === null
       ) {
-        return { ...state }
+        return { value: { ...state.value } }
       }
       return {
-        ...state,
         value: {
           ...state.value,
           current: -current,
@@ -139,25 +130,20 @@ export class CalculateCommand {
       previous === null ||
       current === null
     ) {
-      return { ...state }
+      return { value: { ...state.value } }
     }
     switch (operator) {
       case '+':
         return {
-          ...state,
           value: {
             previous: null,
             operator: null,
             current: AddCommand.execute(previous, current),
           },
-          history: [
-            ...state.history,
-            [previous, operator, current],
-          ],
+          history: [previous, operator, current],
         }
       case '-':
         return {
-          ...state,
           value: {
             previous: null,
             operator: null,
@@ -166,14 +152,10 @@ export class CalculateCommand {
               current,
             ),
           },
-          history: [
-            ...state.history,
-            [previous, operator, current],
-          ],
+          history: [previous, operator, current],
         }
       case '*':
         return {
-          ...state,
           value: {
             previous: null,
             operator: null,
@@ -182,14 +164,10 @@ export class CalculateCommand {
               current,
             ),
           },
-          history: [
-            ...state.history,
-            [previous, operator, current],
-          ],
+          history: [previous, operator, current],
         }
       case '/':
         return {
-          ...state,
           value: {
             previous: null,
             operator: null,
@@ -198,14 +176,10 @@ export class CalculateCommand {
               current,
             ),
           },
-          history: [
-            ...state.history,
-            [previous, operator, current],
-          ],
+          history: [previous, operator, current],
         }
       case '%':
         return {
-          ...state,
           value: {
             previous: null,
             operator: null,
@@ -214,10 +188,7 @@ export class CalculateCommand {
               current,
             ),
           },
-          history: [
-            ...state.history,
-            [previous, operator, current],
-          ],
+          history: [previous, operator, current],
         }
     }
   }
@@ -272,7 +243,6 @@ export class RemainderCommand {
 export class ClearHistoryCommand {
   execute(state) {
     return {
-      ...state,
       history: [],
     }
   }
@@ -281,7 +251,6 @@ export class ClearHistoryCommand {
 export class ClearAllCommand {
   execute(state) {
     return {
-      ...state,
       value: {
         previous: null,
         operator: null,
@@ -301,7 +270,9 @@ export class BackspaceCommand {
       operator === null
     )
       return {
-        ...state,
+        value: {
+          ...state.value,
+        },
       }
     if (
       previous === null &&
@@ -309,7 +280,6 @@ export class BackspaceCommand {
       current.length > 1
     ) {
       return {
-        ...state,
         value: {
           ...state.value,
           current: current.substr(0, current.length - 1),
@@ -323,7 +293,6 @@ export class BackspaceCommand {
       current !== '0'
     ) {
       return {
-        ...state,
         value: {
           ...state.value,
           current: '0',
@@ -332,7 +301,6 @@ export class BackspaceCommand {
     }
     if (current === null && operator !== null) {
       return {
-        ...state,
         value: {
           ...state.value,
           operator: null,
@@ -343,7 +311,6 @@ export class BackspaceCommand {
     }
     if (current.length > 1) {
       return {
-        ...state,
         value: {
           ...state.value,
           current: current.substr(0, current.length - 1),
@@ -352,7 +319,6 @@ export class BackspaceCommand {
     }
     if (current.length < 2) {
       return {
-        ...state,
         value: {
           ...state.value,
           current: null,

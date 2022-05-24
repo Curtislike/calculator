@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import Display from '@/containers/Calculator/Display/Display'
 import Keypad from '@/containers/Calculator/Keypad/Keypad'
@@ -8,6 +9,15 @@ import {
   WrapperDisplayKeypad,
 } from './components'
 import ControlPanel from './ControlPanel/ControlPanel'
+import { getHistory } from '@/selectors/hitory.selectors'
+import {
+  addToHistory,
+  clearAllHistory,
+} from '@/actions/history.actions'
+import {
+  ClearAllCommand,
+  CalculateCommand,
+} from '@/utils/commands'
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -29,11 +39,16 @@ class Calculator extends React.Component {
 
   executeCommand(command) {
     const newState = command.execute(this.state)
-    console.log(newState)
-
+    // console.log(command instanceof ClearAllCommand)
     this.setState({
       ...newState,
     })
+    if (command instanceof CalculateCommand) {
+      this.props.addToHistory(newState.history)
+    }
+    if (command instanceof ClearAllCommand) {
+      this.props.clearAllHistory()
+    }
   }
 
   handleHistoryClick() {
@@ -57,11 +72,19 @@ class Calculator extends React.Component {
           }></ControlPanel>
         <History
           isHistoryVisible={this.state.isHistoryVisible}
-          handleHistoryClick={this.handleHistoryClick}
-          history={this.state.history}></History>
+          handleHistoryClick={
+            this.handleHistoryClick
+          }></History>
       </StyledCalculator>
     )
   }
 }
 
-export default Calculator
+const mapStateToProps = props => ({
+  history: getHistory(props),
+})
+
+export default connect(
+  mapStateToProps,
+  { addToHistory, clearAllHistory },
+)(Calculator)
