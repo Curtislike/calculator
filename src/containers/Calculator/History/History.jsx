@@ -1,5 +1,6 @@
 import React from 'react'
 import uniqid from 'uniqid'
+import { connect } from 'react-redux'
 
 import {
   StyledHistory,
@@ -9,6 +10,7 @@ import {
   CloseBtn,
   TitleWrap,
 } from './components'
+import { getHistory } from '@/selectors/hitory.selectors'
 
 class History extends React.Component {
   constructor(props) {
@@ -44,4 +46,8 @@ class History extends React.Component {
   }
 }
 
-export default History
+const mapStateToProps = props => ({
+  history: getHistory(props),
+})
+
+export default connect(mapStateToProps)(History)
