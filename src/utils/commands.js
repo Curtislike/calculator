@@ -1,3 +1,94 @@
+function checkBrackets(str) {
+  let depth = 0
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] == '(') {
+      depth++
+    } else if (str[i] == ')') {
+      depth--
+    }
+    if (depth < 0) return false
+  }
+  if (depth > 0) return false
+  return true
+}
+
+function splitStr(str) {
+  let arr = []
+  let value = ''
+  for (let i = 0; i < str.length; i++) {
+    if (
+      str[i] === '+' ||
+      str[i] === '-' ||
+      str[i] === '*' ||
+      str[i] === '/' ||
+      str[i] === '%' ||
+      str[i] === '(' ||
+      str[i] === ')'
+    ) {
+      arr.push(str[i])
+      continue
+    }
+    if (!isNaN(str[i])) {
+      if (isNaN(str[i - 1]) && isNaN(str[i + 1])) {
+        arr.push(str[i])
+        continue
+      }
+      if (!isNaN(str[i + 1])) {
+        value = value + str[i]
+        continue
+      }
+      if (!isNaN(str[i - 1]) && isNaN(str[i + 1])) {
+        value = value + str[i]
+        arr.push(value)
+        value = ''
+        continue
+      }
+    }
+  }
+  return arr
+}
+
+function checkIfPrevNumberContainsDot(str) {
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (str[i] === '.') {
+      return true
+    }
+    if (!isNaN(str[i])) {
+      continue
+    }
+    if (isNaN(str[i])) {
+      return false
+    }
+  }
+  return false
+}
+
+function getLastNumberFromString(str) {
+  let value
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (!isNaN(str[i]) && !isNaN(str[i - 1])) {
+      continue
+    }
+    if (!isNaN(str[i]) && isNaN(str[i - 1])) {
+      value = str.slice(i, str.length)
+      return value
+    }
+  }
+}
+
+function cutLastNumberFromString(str) {
+  let value
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (!isNaN(str[i]) && !isNaN(str[i - 1])) {
+      continue
+    }
+    if (!isNaN(str[i]) && isNaN(str[i - 1])) {
+      value = str.slice(0, i)
+      return value
+    }
+  }
+}
+
 export class AppendCharacterCommand {
   constructor(characterToAppend, type) {
     this.characterToAppend = characterToAppend
@@ -5,115 +96,155 @@ export class AppendCharacterCommand {
   }
 
   execute(state) {
-    const { previous, operator, current } = state.value
+    const current = state.value
     if (this.type === 'digit') {
       if (
         current === '0' &&
         this.characterToAppend === '.'
       ) {
         return {
-          value: {
-            ...state.value,
-            current: current + this.characterToAppend,
-          },
-        }
-      }
-      if (
-        current === null &&
-        this.characterToAppend === '.'
-      ) {
-        return {
-          value: {
-            ...state.value,
-            current: '0' + this.characterToAppend,
-          },
+          value: current + this.characterToAppend,
         }
       }
       if (current === '0') {
         return {
-          value: {
-            ...state.value,
-            current: this.characterToAppend,
-          },
-        }
-      }
-      if (current === null) {
-        return {
-          value: {
-            ...state.value,
-            current: this.characterToAppend,
-          },
+          value: this.characterToAppend,
         }
       }
       if (
         this.characterToAppend === '.' &&
-        current !== null &&
-        current.includes('.')
+        checkIfPrevNumberContainsDot(current)
       ) {
-        return { value: { ...state.value } }
+        return { value: current }
+      }
+      if (
+        this.characterToAppend === '.' &&
+        isNaN(current[current.length - 1])
+      ) {
+        return {
+          value: current + '0' + this.characterToAppend,
+        }
       } else {
         return {
-          value: {
-            ...state.value,
-            current: current + this.characterToAppend,
-          },
+          value: current + this.characterToAppend,
         }
       }
     }
     if (this.type === 'operator') {
-      if (previous === null && current === null) {
-        return { value: { ...state.value } }
-      }
-      if (current === null) {
+      if (
+        current[current.length - 1] === '+' ||
+        current[current.length - 1] === '-' ||
+        current[current.length - 1] === '*' ||
+        current[current.length - 1] === '/' ||
+        current[current.length - 1] === '%' ||
+        current[current.length - 1] === '.'
+      ) {
+        const currentWithoutLastOperator = current.slice(
+          0,
+          -1,
+        )
         return {
-          value: {
-            ...state.value,
-            operator: this.characterToAppend,
-          },
+          value:
+            currentWithoutLastOperator +
+            this.characterToAppend,
         }
       }
-      if (previous === null) {
+      if (current === '') {
         return {
-          value: {
-            previous: current,
-            operator: this.characterToAppend,
-            current: null,
-          },
+          value: '0' + this.characterToAppend,
+        }
+      }
+      if (
+        current[current.length - 1] === '(' &&
+        this.characterToAppend !== '-'
+      ) {
+        return {
+          value: current + '0' + this.characterToAppend,
         }
       }
       return {
-        value: {
-          ...state.value,
-        },
+        value: current + this.characterToAppend,
       }
     }
     if (this.type === 'sign') {
-      if (
-        (current === 0 && previous === null) ||
-        current === null
-      ) {
-        return { value: { ...state.value } }
+      const lastNum = getLastNumberFromString(current)
+      const currentWithoutLastNumber = cutLastNumberFromString(
+        current,
+      )
+      if (current === '0') {
+        return { value: current }
       }
-      return {
-        value: {
-          ...state.value,
-          current: -current,
-        },
+      if (current[current.length - 1] === '-') {
+        let currentWithotLastSymbol = current.slice(0, -1)
+        return { value: currentWithotLastSymbol + '+' }
+      }
+      if (isNaN(current[current.length - 1])) {
+        return { value: current }
+      }
+      if (
+        currentWithoutLastNumber[
+          currentWithoutLastNumber.length - 1
+        ] === '-'
+      ) {
+        let currentWithoutLastOperator = currentWithoutLastNumber.slice(
+          0,
+          -1,
+        )
+        return {
+          value: currentWithoutLastOperator + '+' + lastNum,
+        }
+      }
+      if (
+        lastNum &&
+        currentWithoutLastNumber[
+          currentWithoutLastNumber.length - 1
+        ] !== '-'
+      ) {
+        return {
+          value: currentWithoutLastNumber + -lastNum,
+        }
+      }
+      if (!isNaN(current)) {
+        return {
+          value: -current,
+        }
+      } else {
+        return {
+          value: current,
+        }
       }
     }
-  }
-}
-
-export class ClearEntryCommand {
-  execute(state) {
-    const { previous, operator, current } = state.value
-    return {
-      ...state,
-      value: {
-        previous: null,
-        operator: null,
-        current: '0',
-      },
+    if (this.type === 'bracket') {
+      if (current === '0') {
+        return {
+          value: this.characterToAppend,
+        }
+      }
+      if (
+        this.characterToAppend === ')' &&
+        (!current.includes('(') ||
+          current[current.length - 1] === '+' ||
+          current[current.length - 1] === '-' ||
+          current[current.length - 1] === '*' ||
+          current[current.length - 1] === '/' ||
+          current[current.length - 1] === '%' ||
+          current[current.length - 1] === '.')
+      ) {
+        return {
+          value: current,
+        }
+      }
+      if (
+        this.characterToAppend === '(' &&
+        !isNaN(current[current.length - 1])
+      ) {
+        return {
+          value: current,
+        }
+      }
+      return {
+        value: current + this.characterToAppend,
+      }
     }
   }
 }
@@ -124,119 +255,45 @@ export class CalculateCommand {
   }
 
   execute(state) {
-    const { previous, operator, current } = state.value
-    if (
-      operator === null ||
-      previous === null ||
-      current === null
-    ) {
-      return { value: { ...state.value } }
+    const current = state.value
+    if (current.length < 2) {
+      return { value: current }
     }
-    switch (operator) {
-      case '+':
+    try {
+      let result = eval(current)
+      if (result === Infinity) {
+        alert('division by zero is impossible')
         return {
-          value: {
-            previous: null,
-            operator: null,
-            current: AddCommand.execute(previous, current),
-          },
-          history: [previous, operator, current],
+          value: current,
         }
-      case '-':
-        return {
-          value: {
-            previous: null,
-            operator: null,
-            current: SubtractCommand.execute(
-              previous,
-              current,
-            ),
-          },
-          history: [previous, operator, current],
+      } else {
+        if (result % 2 === 0) {
+          return {
+            value: result,
+            history: [current],
+          }
+        } else {
+          return {
+            value: result.toFixed(3),
+            history: [current],
+          }
         }
-      case '*':
-        return {
-          value: {
-            previous: null,
-            operator: null,
-            current: MultiplyCommand.execute(
-              previous,
-              current,
-            ),
-          },
-          history: [previous, operator, current],
-        }
-      case '/':
-        return {
-          value: {
-            previous: null,
-            operator: null,
-            current: DivideCommand.execute(
-              previous,
-              current,
-            ),
-          },
-          history: [previous, operator, current],
-        }
-      case '%':
-        return {
-          value: {
-            previous: null,
-            operator: null,
-            current: RemainderCommand.execute(
-              previous,
-              current,
-            ),
-          },
-          history: [previous, operator, current],
-        }
+      }
+    } catch {
+      alert('Something went wrong. Check your expression')
+      return {
+        value: current,
+      }
     }
   }
 }
 
-export class AddCommand {
-  static execute(currentValue, valueToAdd) {
-    return (+currentValue + +valueToAdd).toString()
-  }
-}
-
-export class SubtractCommand {
-  static execute(currentValue, valueToSubtract) {
-    return (currentValue - valueToSubtract).toString()
-  }
-}
-
-export class MultiplyCommand {
-  static execute(currentValue, valueToMultiply) {
-    if (Number.isInteger(currentValue * valueToMultiply)) {
-      return (currentValue * valueToMultiply).toString()
-    } else {
-      return (currentValue * valueToMultiply)
-        .toFixed(3)
-        .toString()
+export class ClearEntryCommand {
+  execute(state) {
+    const current = state.value
+    return {
+      value: '0',
     }
-  }
-}
-
-export class DivideCommand {
-  static execute(currentValue, valueToDivide) {
-    if (valueToDivide === '0') {
-      alert('Division by zero is impossible')
-      return '0'
-    }
-    if (currentValue % valueToDivide) {
-      return (currentValue / valueToDivide)
-        .toFixed(3)
-        .toString()
-    } else {
-      return (currentValue / valueToDivide).toString()
-    }
-  }
-}
-
-export class RemainderCommand {
-  static execute(currentValue, valueToDivide) {
-    return (currentValue % valueToDivide).toString()
   }
 }
 
@@ -251,11 +308,7 @@ export class ClearHistoryCommand {
 export class ClearAllCommand {
   execute(state) {
     return {
-      value: {
-        previous: null,
-        operator: null,
-        current: '0',
-      },
+      value: '0',
       history: [],
     }
   }
@@ -263,73 +316,15 @@ export class ClearAllCommand {
 
 export class BackspaceCommand {
   execute(state) {
-    const { previous, operator, current } = state.value
-    if (
-      (current === null || current === '0') &&
-      previous === null &&
-      operator === null
-    )
-      return {
-        value: {
-          ...state.value,
-        },
-      }
-    if (
-      previous === null &&
-      operator === null &&
-      current.length > 1
-    ) {
-      return {
-        value: {
-          ...state.value,
-          current: current.substr(0, current.length - 1),
-        },
-      }
-    }
-    if (
-      previous === null &&
-      operator === null &&
-      current.length < 2 &&
-      current !== '0'
-    ) {
-      return {
-        value: {
-          ...state.value,
-          current: '0',
-        },
-      }
-    }
-    if (current === null && operator !== null) {
-      return {
-        value: {
-          ...state.value,
-          operator: null,
-          previous: null,
-          current: previous,
-        },
-      }
-    }
-    if (current.length > 1) {
-      return {
-        value: {
-          ...state.value,
-          current: current.substr(0, current.length - 1),
-        },
-      }
-    }
+    const current = state.value
     if (current.length < 2) {
       return {
-        value: {
-          ...state.value,
-          current: null,
-        },
+        value: '0',
       }
     }
-  }
-}
 
-export class ShowHistory {
-  execute(state) {
-    return history
+    return {
+      value: current.slice(0, -1),
+    }
   }
 }

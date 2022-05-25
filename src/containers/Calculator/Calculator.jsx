@@ -23,11 +23,7 @@ class Calculator extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: {
-        previous: null,
-        operator: null,
-        current: '0',
-      },
+      value: '0',
       history: [],
       isHistoryVisible: true,
     }
@@ -39,11 +35,13 @@ class Calculator extends React.Component {
 
   executeCommand(command) {
     const newState = command.execute(this.state)
-    // console.log(command instanceof ClearAllCommand)
     this.setState({
       ...newState,
     })
-    if (command instanceof CalculateCommand) {
+    if (
+      command instanceof CalculateCommand &&
+      newState.history
+    ) {
       this.props.addToHistory(newState.history)
     }
     if (command instanceof ClearAllCommand) {
