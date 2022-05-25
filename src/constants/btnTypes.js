@@ -90,7 +90,7 @@ export const btnTypes = [
     command: AppendCharacterCommand,
   },
   {
-    type: 'digit',
+    type: 'bracket',
     label: '(',
     command: AppendCharacterCommand,
   },
@@ -100,7 +100,7 @@ export const btnTypes = [
     command: AppendCharacterCommand,
   },
   {
-    type: 'digit',
+    type: 'bracket',
     label: ')',
     command: AppendCharacterCommand,
   },

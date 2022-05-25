@@ -35,7 +35,7 @@ class History extends React.Component {
               {!!this.props.history.length &&
                 this.props.history.map(item => (
                   <HistoryResult key={uniqid()}>
-                    {item[0] + item[1] + item[2]}
+                    {item[0]}
                   </HistoryResult>
                 ))}
             </HistoryResultWrap>

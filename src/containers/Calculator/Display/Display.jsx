@@ -10,13 +10,7 @@ class Display extends React.Component {
   render() {
     return (
       <StyledDisplay>
-        <DisplayValue>
-          {this.props.value.previous}{' '}
-          {this.props.value.operator}
-        </DisplayValue>
-        <DisplayValue>
-          {this.props.value.current}
-        </DisplayValue>
+        <DisplayValue>{this.props.value}</DisplayValue>
       </StyledDisplay>
     )
   }
