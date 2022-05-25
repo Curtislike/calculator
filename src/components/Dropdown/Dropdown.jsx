@@ -46,6 +46,7 @@ const Dropdown = () => {
   return (
     <StyledDropdown>
       <DropdownButton
+        className="dropdown"
         onClick={() => setIsActive(!isActive)}>
         {selectTheme[themeNum].label}
         <ArrowDown />
@@ -55,6 +56,8 @@ const Dropdown = () => {
           {selectTheme.map(item =>
             item.theme !== themeNum ? (
               <DropdownItem
+                className="dropdownItem"
+                id={item.selected.mode}
                 key={item.theme}
                 onClick={() => {
                   setIsActive(false)

@@ -31,7 +31,7 @@ class History extends React.Component {
                 <div className="bar3"></div>
               </CloseBtn>
             </TitleWrap>
-            <HistoryResultWrap>
+            <HistoryResultWrap className="history">
               {!!this.props.history.length &&
                 this.props.history.map(item => (
                   <HistoryResult key={uniqid()}>

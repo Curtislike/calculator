@@ -267,7 +267,7 @@ export class CalculateCommand {
           value: current,
         }
       } else {
-        if (result % 2 === 0) {
+        if (Number.isInteger(result)) {
           return {
             value: result,
             history: [current],
