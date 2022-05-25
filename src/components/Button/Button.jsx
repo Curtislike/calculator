@@ -10,8 +10,10 @@ const Button = ({
   label,
   command,
   executeCommand,
+  id,
 }) => (
   <StyledButton
+    className={id}
     onClick={() =>
       executeCommand(new command(label, type))
     }>

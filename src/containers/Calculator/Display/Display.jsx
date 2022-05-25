@@ -10,7 +10,9 @@ class Display extends React.Component {
   render() {
     return (
       <StyledDisplay>
-        <DisplayValue>{this.props.value}</DisplayValue>
+        <DisplayValue className="display">
+          {this.props.value}
+        </DisplayValue>
       </StyledDisplay>
     )
   }

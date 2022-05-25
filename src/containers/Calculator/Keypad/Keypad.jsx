@@ -13,12 +13,13 @@ class Keypad extends React.Component {
   render() {
     return (
       <StyledKeypad>
-        {btnTypes.map(({ type, label, command }) => (
+        {btnTypes.map(({ type, label, command, id }) => (
           <Button
             key={label}
             type={type}
             label={label}
             command={command}
+            id={id}
             executeCommand={this.props.executeCommand}
           />
         ))}
