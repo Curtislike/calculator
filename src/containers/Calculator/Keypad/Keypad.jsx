@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import Button from '@/components/Button/Button'
 import { btnTypes } from '@/constants/btnTypes'
@@ -26,6 +27,10 @@ class Keypad extends React.Component {
       </StyledKeypad>
     )
   }
+}
+
+Keypad.propTypes = {
+  executeCommand: PropTypes.any,
 }
 
 export default Keypad

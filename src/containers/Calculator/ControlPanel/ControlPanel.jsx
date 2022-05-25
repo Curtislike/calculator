@@ -1,6 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import { StyledPanel } from './components'
+import ErrorBoundary from '@/components/ErrorBoundary/ErrorBoundary'
 
 class ControlPanel extends React.Component {
   constructor(props) {
@@ -11,18 +13,25 @@ class ControlPanel extends React.Component {
     return (
       <>
         {!this.props.isHistoryVisible && (
-          <StyledPanel
-            onClick={() => {
-              this.props.handleHistoryClick()
-            }}>
-            <div className="item"></div>
-            <div className="item"></div>
-            <div className="item"></div>
-          </StyledPanel>
+          <ErrorBoundary>
+            <StyledPanel
+              onClick={() => {
+                this.props.handleHistoryClick()
+              }}>
+              <div className="item"></div>
+              <div className="item"></div>
+              <div className="item"></div>
+            </StyledPanel>
+          </ErrorBoundary>
         )}
       </>
     )
   }
+}
+
+ControlPanel.propTypes = {
+  isHistoryVisible: PropTypes.bool,
+  handleHistoryClick: PropTypes.func,
 }
 
 export default ControlPanel

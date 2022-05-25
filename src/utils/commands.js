@@ -1,93 +1,10 @@
-function checkBrackets(str) {
-  let depth = 0
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] == '(') {
-      depth++
-    } else if (str[i] == ')') {
-      depth--
-    }
-    if (depth < 0) return false
-  }
-  if (depth > 0) return false
-  return true
-}
-
-function splitStr(str) {
-  let arr = []
-  let value = ''
-  for (let i = 0; i < str.length; i++) {
-    if (
-      str[i] === '+' ||
-      str[i] === '-' ||
-      str[i] === '*' ||
-      str[i] === '/' ||
-      str[i] === '%' ||
-      str[i] === '(' ||
-      str[i] === ')'
-    ) {
-      arr.push(str[i])
-      continue
-    }
-    if (!isNaN(str[i])) {
-      if (isNaN(str[i - 1]) && isNaN(str[i + 1])) {
-        arr.push(str[i])
-        continue
-      }
-      if (!isNaN(str[i + 1])) {
-        value = value + str[i]
-        continue
-      }
-      if (!isNaN(str[i - 1]) && isNaN(str[i + 1])) {
-        value = value + str[i]
-        arr.push(value)
-        value = ''
-        continue
-      }
-    }
-  }
-  return arr
-}
-
-function checkIfPrevNumberContainsDot(str) {
-  for (let i = str.length - 1; i >= 0; i--) {
-    if (str[i] === '.') {
-      return true
-    }
-    if (!isNaN(str[i])) {
-      continue
-    }
-    if (isNaN(str[i])) {
-      return false
-    }
-  }
-  return false
-}
-
-function getLastNumberFromString(str) {
-  let value
-  for (let i = str.length - 1; i >= 0; i--) {
-    if (!isNaN(str[i]) && !isNaN(str[i - 1])) {
-      continue
-    }
-    if (!isNaN(str[i]) && isNaN(str[i - 1])) {
-      value = str.slice(i, str.length)
-      return value
-    }
-  }
-}
-
-function cutLastNumberFromString(str) {
-  let value
-  for (let i = str.length - 1; i >= 0; i--) {
-    if (!isNaN(str[i]) && !isNaN(str[i - 1])) {
-      continue
-    }
-    if (!isNaN(str[i]) && isNaN(str[i - 1])) {
-      value = str.slice(0, i)
-      return value
-    }
-  }
-}
+import {
+  checkBrackets,
+  splitStr,
+  checkIfPrevNumberContainsDot,
+  getLastNumberFromString,
+  cutLastNumberFromString,
+} from './transformString'
 
 export class AppendCharacterCommand {
   constructor(characterToAppend, type) {
@@ -200,6 +117,8 @@ export class AppendCharacterCommand {
           currentWithoutLastNumber.length - 1
         ] !== '-'
       ) {
+        console.log(currentWithoutLastNumber)
+        console.log(lastNum)
         return {
           value: currentWithoutLastNumber + -lastNum,
         }
@@ -260,8 +179,11 @@ export class CalculateCommand {
       return { value: current }
     }
     try {
+      if (current.search(/[^0-9*/+-.%()]/im) !== -1) {
+        return
+      }
       let result = eval(current)
-      if (result === Infinity) {
+      if (result === Infinity || result === -Infinity) {
         alert('division by zero is impossible')
         return {
           value: current,
@@ -269,12 +191,12 @@ export class CalculateCommand {
       } else {
         if (Number.isInteger(result)) {
           return {
-            value: result,
+            value: result.toString(),
             history: [current],
           }
         } else {
           return {
-            value: result.toFixed(3),
+            value: result.toFixed(3).toString(),
             history: [current],
           }
         }
